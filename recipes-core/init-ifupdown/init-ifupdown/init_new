@@ -1,0 +1,57 @@
+#!/bin/sh -e
+### BEGIN INIT INFO
+# Provides:          networking
+# Required-Start:    mountvirtfs $local_fs
+# Required-Stop:     $local_fs
+# Should-Start:      ifupdown
+# Should-Stop:       ifupdown
+# Default-Start:     S
+# Default-Stop:      0 6
+# Short-Description: Raise network interfaces.
+### END INIT INFO
+
+case "$1" in
+start)
+	echo -n "Configuring network interfaces... "
+	sysctl -e -p /etc/sysctl.conf >/dev/null 2>&1
+	ip link set eth0 up
+	ip link add link eth0 name eth0.1 type vlan id 1
+	ip link add link eth0 name eth0.2 type vlan id 2
+	ip link set eth0.1 up
+	ip link set eth0.2 up
+
+	start-stop-daemon --start -x /sbin/udhcpc -p /var/run/udhcpc.eth0.1.pid -- -i eth0.1
+
+	brctl addbr internal
+	brctl addif internal eth0.2
+	ip link set internal up
+	ip addr add 192.168.179.1/24 dev internal
+	echo "done."
+	;;
+
+stop)
+	echo -n "Deconfiguring network interfaces... "
+	start-stop-daeom --stop -x /sbin/udhcpc -p /var/run/udhcpc.eth0.1.pid
+	ip link set network down
+	brctl delbr internal
+	ip link del eth0.1
+	ip link del eth0.2
+	ip link set eth0 down
+	echo "done."
+	;;
+
+force-reload|restart)
+	echo "Running $0 $1 is deprecated because it may not enable again some interfaces"
+	echo "Reconfiguring network interfaces... "
+	"$0" stop
+	"$0" start
+	echo "done."
+	;;
+
+*)
+	echo "Usage: /etc/init.d/networking {start|stop}"
+	exit 1
+	;;
+esac
+
+exit 0

@@ -1,0 +1,47 @@
+--- ../mconfig	2015-10-06 19:28:25.114367599 +0100
++++ mconfig	2015-10-06 21:20:54.321816988 +0100
+@@ -1,24 +1,24 @@
+ # -*- Makefile -*-
+ #
+-build_ACCOUNT=m
+-build_CHAOS=m
+-build_DELUDE=m
+-build_DHCPMAC=m
+-build_DNETMAP=m
+-build_ECHO=m
+-build_IPMARK=m
+-build_LOGMARK=m
+-build_SYSRQ=m
+-build_TARPIT=m
+-build_condition=m
+-build_fuzzy=m
++build_ACCOUNT=n
++build_CHAOS=n
++build_DELUDE=n
++build_DHCPMAC=n
++build_DNETMAP=n
++build_ECHO=n
++build_IPMARK=n
++build_LOGMARK=n
++build_SYSRQ=n
++build_TARPIT=n
++build_condition=n
++build_fuzzy=n
+ build_geoip=m
+-build_gradm=m
++build_gradm=n
+ build_iface=m
+-build_ipp2p=m
+-build_ipv4options=m
+-build_length2=m
+-build_lscan=m
+-build_pknock=m
+-build_psd=m
+-build_quota2=m
++build_ipp2p=n
++build_ipv4options=n
++build_length2=n
++build_lscan=n
++build_pknock=n
++build_psd=n
++build_quota2=n
